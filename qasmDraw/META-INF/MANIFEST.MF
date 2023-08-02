@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: qasmDraw
+Bundle-ManifestVersion: 2
+Bundle-Name: qasmDraw
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: qasmDraw; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
+ org.eclipse.equinox.common;bundle-version="3.16.0",
+ org.eclipse.emf.ecore,
+ org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
+ org.eclipse.xtext.util,
+ org.eclipse.emf.common,
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Export-Package: org.xtext.openqasm.openQASM3.impl,
+ org.xtext.openqasm.parser.antlr,
+ org.xtext.openqasm.openQASM3.util,
+ org.xtext.openqasm.serializer,
+ org.xtext.openqasm.scoping,
+ org.xtext.openqasm.parser.antlr.internal,
+ org.xtext.openqasm.validation,
+ org.xtext.openqasm,
+ org.xtext.openqasm.openQASM3,
+ org.xtext.openqasm.generator,
+ org.xtext.openqasm.services
+Import-Package: org.apache.log4j

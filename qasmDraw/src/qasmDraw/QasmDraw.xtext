@@ -1,0 +1,135 @@
+grammar org.xtext.openqasm.OpenQASM3 with org.eclipse.xtext.common.Terminals
+
+generate openQASM3 "http://www.xtext.org/openqasm/OpenQASM3"
+
+Program:
+    version=Version?
+    
+    statements+=(Statement)*;
+	    
+Version:
+    ('OPENQASM' versionNumber=FloatLiteral) SEMICOLON
+;
+
+Statement:
+	IncludeStatement
+	|quantumDeclarationStatement
+	|GateCallStatement
+	|IfStatement
+;
+
+quantumDeclarationStatement:
+	QubitType name=ID SEMICOLON
+;
+
+GateCallStatement:
+	('gate')? gate=ID (LPAREN el=ExpressionList? RPAREN)? gateList=GateOperandList (( scope=Scope| SEMICOLON ))
+;
+
+IfStatement:
+    'if' LPAREN condition=Expression RPAREN if_body=statementOrScope; //(ELSE else_body=statementOrScope)?;
+    
+statementOrScope:
+	Statement|Scope
+;
+
+Scope:
+	{Scope} LBRACE statements+=Statement* RBRACE;
+
+ExpressionList:
+	e1=Expression (COMMA e2+=Expression)* COMMA?
+;
+
+Expression:
+	
+	LPAREN exprs+=Expression RPAREN
+    | ltrs+=Literal
+    | unExpressions+=UnaryExpression
+    | multExpressions+=MultiplicativeExpression
+;
+
+Literal:
+	l= FloatLiteral
+    | {Literal} STRING
+    | {Literal} DecimalIntegerLiteral
+;
+
+MultiplicativeExpression:
+    l1+=Literal MultiplicativeOperator l1+=Literal (MultiplicativeOperator l1+=Literal)*;
+
+MultiplicativeOperator:
+	ASTERISK | SLASH
+;
+UnaryExpression:
+    (op=UnaryOperator) l=Literal;
+    
+UnaryOperator:
+    TILDE | EXCLAMATION_POINT;
+
+	
+IndexOperator:
+	LBRACKET 
+	(
+		Expression (COMMA e+=Expression)* COMMA?
+	)
+	RBRACKET
+;
+
+IndexedIdentifier: 
+	gateName=ID (io+=IndexOperator)*
+;
+
+GateOperand: 
+	IndexedIdentifier
+;
+
+GateOperandList: 
+	GateOperand (COMMA extraGO+=GateOperand)* COMMA?
+;
+
+QubitType:
+     QUBIT d=Designator;
+
+Designator:
+	{Designator} LBRACKET e=Expression? RBRACKET
+;
+
+FloatLiteral:
+	//( MINUS? DecimalIntegerLiteral DOT DecimalIntegerLiteral? ((('e-' | 'e')) DecimalIntegerLiteral (DOT DecimalIntegerLiteral)?)?)
+	( DecimalIntegerLiteral DOT DecimalIntegerLiteral? (('e') DecimalIntegerLiteral (DOT DecimalIntegerLiteral)?)?)
+	|'pi'
+;
+
+DecimalIntegerLiteral:
+    (MINUS)? INT
+;
+
+
+IncludeStatement:
+	'include' libName=STRING SEMICOLON
+;
+terminal ELSE:'else';
+terminal MINUS:'-';
+terminal EXCLAMATION_POINT:'!';
+terminal TILDE:'~';
+terminal PERCENT: '%';
+terminal SLASH:'/';
+terminal ASTERISK:'*';
+terminal DOT:	'.';
+terminal COMMA:	',';
+terminal BIT: 'bit';
+terminal FLOAT: 'float';
+terminal ANGLE: 'angle';
+terminal BOOL: 'bool';
+terminal DURATION: 'duration';
+terminal STRETCH: 'stretch';
+terminal COMPLEX: 'complex';
+terminal ARRAY: 'array';
+terminal QUBIT: 'qubit';
+terminal LBRACKET: '[';
+terminal RBRACKET: ']';
+terminal SEMICOLON: ';';
+terminal LPAREN: '(';
+terminal RPAREN: ')';
+terminal LBRACE: '{';
+terminal RBRACE: '}';  

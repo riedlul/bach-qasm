@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+	<extension point="org.eclipse.emf.ecore.generated_package">
+		<package
+			uri = "http://www.xtext.org/openqasm/OpenQASM3"
+			class = "org.xtext.openqasm.openQASM3.OpenQASM3Package"
+			genModel = "model/generated/OpenQASM3.genmodel" />
+	</extension>
+</plugin>
